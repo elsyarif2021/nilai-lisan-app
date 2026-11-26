@@ -11,7 +11,7 @@ function extractRecords(rows){
  const no=rows[h].findIndex(v=>['no','no.','nomor'].includes(norm(v)));
  let seen=new Set(),out=[];
  for(let i=h+1;i<rows.length;i++){let r=rows[i],n=String(r[c]??'').trim().replace(/\s+/g,' ');
- if(!n||n.length>150||/^\d+$/.test(n)||/^penguji\s*:/i.test(n)||(no>=0&&!/^\d+$/.test(String(r[no]??'').trim())))continue;
+ if(!n||n.length>150||/^\d+$/.test(n)||/^penguji\s*:/i.test(n)||(no>=0&&!(String(r[no]??'').trim()!=='' && Number.isInteger(Number(r[no])) && Number(r[no])>0)))continue;
  if(seen.has(norm(n)))throw Error('Nama ganda dalam file: '+n);seen.add(norm(n));
  let v=cols.map(j=>{let s=String(r[j]??'').trim();if(!s)return '';let x=Number(s.replace(',','.'));if(!Number.isFinite(x)||x<0||x>100)throw Error('Nilai tidak valid pada baris '+(i+1));return x;});
  out.push({n,v});}return out;
